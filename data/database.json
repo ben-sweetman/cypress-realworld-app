@@ -74,6 +74,17 @@
       "balance": 49474,
       "createdAt": "2023-12-07T04:39:38.383Z",
       "modifiedAt": "2024-03-07T00:07:36.510Z"
+    },
+    {
+      "id": "Xhfn1fIIs",
+      "uuid": "cb7ecf38-25d7-44f2-bfaf-5f8603c3c49a",
+      "firstName": "Test",
+      "lastName": "User",
+      "username": "testuser123",
+      "password": "$2a$10$lesGW8raToMGV5VVjwtutun/fAtRLSTczC5Swuz1rzgGSxzxXglLO",
+      "balance": 0,
+      "createdAt": "2026-01-29T22:05:30.928Z",
+      "modifiedAt": "2026-01-29T22:05:30.928Z"
     }
   ],
   "contacts": [
