@@ -76,15 +76,15 @@
       "modifiedAt": "2024-03-07T00:07:36.510Z"
     },
     {
-      "id": "JCoUxfoRn",
-      "uuid": "5f582fd9-905c-4120-945a-b1f3b2cd861c",
+      "id": "wMiyYOm4j",
+      "uuid": "59955f39-bfaf-4a1c-821b-fe47afc8f586",
       "firstName": "Test",
       "lastName": "User",
       "username": "testuser123",
-      "password": "$2a$10$0/TlUHuBq/Pbw2U88LQn6ugaX7Fcud.JZIYJU1XLJ7oZHKOLhzzOO",
+      "password": "$2a$10$a5ufh4zSW1i5PqMXMsfaW.NokPr.EmJ3RJ.8vm3RoR1hpYrvrdWvi",
       "balance": 0,
-      "createdAt": "2026-01-30T16:25:29.529Z",
-      "modifiedAt": "2026-01-30T16:25:29.529Z"
+      "createdAt": "2026-01-30T16:41:51.201Z",
+      "modifiedAt": "2026-01-30T16:41:51.201Z"
     }
   ],
   "contacts": [
@@ -266,15 +266,15 @@
       "modifiedAt": "2024-03-07T08:44:31.174Z"
     },
     {
-      "id": "wUGHs92BN",
-      "uuid": "22b8e9ba-144a-4204-9108-ce770ec6a35a",
-      "userId": "JCoUxfoRn",
+      "id": "69XFs4gis",
+      "uuid": "60a75f77-fd1f-41d6-a134-bbbcbf1b4b2d",
+      "userId": "wMiyYOm4j",
       "bankName": "First Bank",
       "accountNumber": "987654321",
       "routingNumber": "123456789",
       "isDeleted": false,
-      "createdAt": "2026-01-30T16:25:42.290Z",
-      "modifiedAt": "2026-01-30T16:25:42.290Z"
+      "createdAt": "2026-01-30T16:42:08.797Z",
+      "modifiedAt": "2026-01-30T16:42:08.797Z"
     }
   ],
   "transactions": [

@@ -390,3 +390,33 @@ Cypress.Commands.add("loginByGoogleApi", () => {
     }
   );
 });
+
+Cypress.Commands.add("signup", (username, password, firstName, lastName) => {
+  const log = Cypress.log({
+    name: "signup",
+    displayName: "SIGN UP",
+    message: [`🆕 Signing up user | ${username}`],
+    // @ts-ignore
+    autoEnd: false,
+  });
+
+    cy.getBySel('signup').click();
+    cy.getBySel('signup-title').should('be.visible').and('contain', 'Sign Up');
+    cy.url().should('include', '/signup');
+    cy.getBySel('signup-submit').click();
+    cy.getBySel('signup-submit').should('be.disabled');
+  
+    cy.getBySel('signup-first-name').type(firstName);
+    cy.getBySel('signup-last-name').type(lastName);
+    cy.getBySel('signup-username').type(username);
+    cy.getBySel('signup-password').type(password);
+    cy.getBySel('signup-confirmPassword').type(password);
+    cy.getBySel('signup-submit').should('be.enabled');
+
+    cy.intercept('POST', '/users').as('signupRequest');
+    cy.getBySel('signup-submit').click();
+    cy.wait('@signupRequest').its('response.statusCode').should('eq', 201).then(() => {
+      log.snapshot("after");
+      log.end();
+    });
+});

@@ -154,5 +154,7 @@ declare namespace Cypress {
      * Logs in to AWS Cognito Federated via cy.origin()
      */
     loginByCognito(username: string, password: string): Chainable<any>;
+
+    signup(username: string, password: string, firstName: string, lastName: string): Chainable<any>;
   }
 }
