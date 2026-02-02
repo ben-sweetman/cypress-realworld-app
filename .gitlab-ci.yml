@@ -2,10 +2,9 @@ stages:
   - test
 
 test:
-  image: node:22
+  image: cypress/browsers:24.13.0
   stage: test
   script:
-    - apt-get update && apt-get install libgtk-3-0 libgbm-dev libnotify-dev libnss3 libxss1 libasound2 libxtst6 xauth xvfb -y
     - yarn install
     - yarn start &
     - sleep 30
