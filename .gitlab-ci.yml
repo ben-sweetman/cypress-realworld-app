@@ -7,4 +7,4 @@ test:
   script:
     - yarn install
     - yarn start &
-    - yarn test:headless
+    - yarn cypress:run
