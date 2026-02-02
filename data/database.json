@@ -3,12 +3,12 @@
     {
       "id": "uBmeaz5pX",
       "uuid": "3b63b436-cacc-457a-a3e8-c962ef9838ac",
-      "firstName": "Ted",
-      "lastName": "Parisian",
+      "firstName": "New First Name",
+      "lastName": "New Last Name",
       "username": "Heath93",
       "password": "$2a$10$nSaCsTPTtbbPTnFXBH0GZu0ExpNMud3d1IuKOC/6a9gwAHkdhppeu",
-      "email": "Santos.Runte65@gmail.com",
-      "phoneNumber": "398-225-9900",
+      "email": "email@email.com",
+      "phoneNumber": "6155551212",
       "avatar": "https://avatars.dicebear.com/api/human/uBmeaz5pX.svg",
       "defaultPrivacyLevel": "public",
       "balance": 150953,
@@ -74,17 +74,6 @@
       "balance": 49474,
       "createdAt": "2023-12-07T04:39:38.383Z",
       "modifiedAt": "2024-03-07T00:07:36.510Z"
-    },
-    {
-      "id": "wMiyYOm4j",
-      "uuid": "59955f39-bfaf-4a1c-821b-fe47afc8f586",
-      "firstName": "Test",
-      "lastName": "User",
-      "username": "testuser123",
-      "password": "$2a$10$a5ufh4zSW1i5PqMXMsfaW.NokPr.EmJ3RJ.8vm3RoR1hpYrvrdWvi",
-      "balance": 0,
-      "createdAt": "2026-01-30T16:41:51.201Z",
-      "modifiedAt": "2026-01-30T16:41:51.201Z"
     }
   ],
   "contacts": [
@@ -264,17 +253,6 @@
       "isDeleted": false,
       "createdAt": "2024-01-26T14:01:01.815Z",
       "modifiedAt": "2024-03-07T08:44:31.174Z"
-    },
-    {
-      "id": "69XFs4gis",
-      "uuid": "60a75f77-fd1f-41d6-a134-bbbcbf1b4b2d",
-      "userId": "wMiyYOm4j",
-      "bankName": "First Bank",
-      "accountNumber": "987654321",
-      "routingNumber": "123456789",
-      "isDeleted": false,
-      "createdAt": "2026-01-30T16:42:08.797Z",
-      "modifiedAt": "2026-01-30T16:42:08.797Z"
     }
   ],
   "transactions": [
