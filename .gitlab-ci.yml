@@ -2,7 +2,7 @@ stages:
   - test
 
 test:
-  image: node:latest
+  image: node:22
   stage: test
   script:
     - yarn install
