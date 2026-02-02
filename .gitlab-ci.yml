@@ -2,7 +2,7 @@ stages:
   - test
 
 test:
-  image: cypress/browsers:24.13.0
+  image: cypress/browsers:22.21.0
   stage: test
   script:
     - yarn install
