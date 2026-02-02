@@ -146,7 +146,7 @@ describe("testing various bits", function () {
     listItemText: 'requested',
     expectedAmount: '+$150.00',
   }].forEach(({ transaction, submitButton, successText, expectedStatus, listItemText, expectedAmount }) => {
-    it.only(`should be able to ${submitButton === 'transaction-create-submit-payment' ? 'pay' : 'request'} money from an existing payee`, function () {
+    it(`should be able to ${submitButton === 'transaction-create-submit-payment' ? 'pay' : 'request'} money from an existing payee`, function () {
       cy.login('Dina20', 's3cret');
 
       cy.getBySel('nav-top-new-transaction').click();
@@ -191,7 +191,7 @@ describe("testing various bits", function () {
     });
   });
 
-  it.only('should handle user attempting to send an invalid amount', function () {
+  it('should handle user attempting to send an invalid amount', function () {
     cy.login('Dina20', 's3cret');
 
     cy.getBySel('nav-top-new-transaction').click();
