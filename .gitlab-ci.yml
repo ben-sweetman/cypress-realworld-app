@@ -1,0 +1,10 @@
+stages:
+  - test
+
+test:
+  image: node:latest
+  stage: test
+  script:
+    - yarn install
+    - yarn start &
+    - yarn cypress:run
