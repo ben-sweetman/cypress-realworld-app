@@ -13,3 +13,5 @@ stages:
 
 include:
   - component: $CI_SERVER_FQDN/to-be-continuous/cypress/gitlab-ci-cypress@3.12.0
+    inputs:
+      image: cypress/browsers:22.21.0
