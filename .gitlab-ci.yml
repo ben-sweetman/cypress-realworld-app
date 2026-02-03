@@ -1,5 +1,6 @@
 stages:
   - test
+  - acceptance
 
 # test:
 #   image: cypress/browsers:22.21.0
