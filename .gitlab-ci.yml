@@ -1,11 +1,16 @@
 stages:
   - test
 
-test:
-  image: cypress/browsers:22.21.0
-  stage: test
-  script:
-    - yarn install
-    - yarn start &
-    - sleep 30
-    - yarn cypress:run
+# test:
+#   image: cypress/browsers:22.21.0
+#   stage: test
+#   script:
+#     - yarn install
+#     - yarn start &
+#     - sleep 30
+#     - yarn cypress:run
+
+include:
+  - component: $CI_SERVER_FQDN/to-be-continuous/cypress/gitlab-ci-cypress@3.12.0
+    inputs:
+      stage: build
