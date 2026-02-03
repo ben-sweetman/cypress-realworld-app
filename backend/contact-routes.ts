@@ -2,17 +2,17 @@
 
 import express from "express";
 
-import { getContactsByUsername, removeContactById, createContactForUser } from "./database";
+import { getContactsByUsername, removeContactById, createContactForUser } from "./database-mongo";
 import { ensureAuthenticated, validateMiddleware } from "./helpers";
 import { shortIdValidation } from "./validators";
 const router = express.Router();
 
 // Routes
 //GET /contacts/:username
-router.get("/:username", (req, res) => {
+router.get("/:username", async (req, res) => {
   const { username } = req.params;
 
-  const contacts = getContactsByUsername(username);
+  const contacts = await getContactsByUsername(username);
 
   res.status(200);
   res.json({ contacts });
@@ -23,10 +23,10 @@ router.post(
   "/",
   ensureAuthenticated,
   validateMiddleware([shortIdValidation("contactUserId")]),
-  (req, res) => {
+  async (req, res) => {
     const { contactUserId } = req.body;
     /* istanbul ignore next */
-    const contact = createContactForUser(req.user?.id!, contactUserId);
+    const contact = await createContactForUser(req.user?.id!, contactUserId);
 
     res.status(200);
     res.json({ contact });
@@ -37,10 +37,10 @@ router.delete(
   "/:contactId",
   ensureAuthenticated,
   validateMiddleware([shortIdValidation("contactId")]),
-  (req, res) => {
+  async (req, res) => {
     const { contactId } = req.params;
 
-    const contacts = removeContactById(contactId);
+    const contacts = await removeContactById(contactId);
 
     res.status(200);
     res.json({ contacts });

@@ -38,6 +38,7 @@
     "dinero.js": "1.9.1",
     "formik": "2.4.6",
     "history": "4.10.1",
+    "mongodb": "^7.0.0",
     "postinstall-postinstall": "^2.1.0",
     "react": "18.2.0",
     "react-calendar": "^6.0.0",

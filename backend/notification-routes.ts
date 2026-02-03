@@ -5,7 +5,7 @@ import {
   createNotifications,
   updateNotificationById,
   getUnreadNotificationsByUserId,
-} from "./database";
+} from "./database-mongo";
 import { ensureAuthenticated, validateMiddleware } from "./helpers";
 import {
   isNotificationsBodyValidator,
@@ -17,9 +17,9 @@ const router = express.Router();
 // Routes
 
 //GET /notifications/
-router.get("/", ensureAuthenticated, (req, res) => {
+router.get("/", ensureAuthenticated, async (req, res) => {
   /* istanbul ignore next */
-  const notifications = getUnreadNotificationsByUserId(req.user?.id!);
+  const notifications = await getUnreadNotificationsByUserId(req.user?.id!);
 
   res.status(200);
   res.json({ results: notifications });
@@ -30,10 +30,10 @@ router.post(
   "/bulk",
   ensureAuthenticated,
   validateMiddleware([...isNotificationsBodyValidator]),
-  (req, res) => {
+  async (req, res) => {
     const { items } = req.body;
     /* istanbul ignore next */
-    const notifications = createNotifications(req.user?.id!, items);
+    const notifications = await createNotifications(req.user?.id!, items);
 
     res.status(200);
     // @ts-ignore
@@ -46,10 +46,10 @@ router.patch(
   "/:notificationId",
   ensureAuthenticated,
   validateMiddleware([shortIdValidation("notificationId"), ...isNotificationPatchValidator]),
-  (req, res) => {
+  async (req, res) => {
     const { notificationId } = req.params;
     /* istanbul ignore next */
-    updateNotificationById(req.user?.id!, notificationId, req.body);
+    await updateNotificationById(req.user?.id!, notificationId, req.body);
 
     res.sendStatus(204);
   }

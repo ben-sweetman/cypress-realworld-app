@@ -2,15 +2,15 @@ import bcrypt from "bcryptjs";
 import passport from "passport";
 import express, { Request, Response } from "express";
 import { User } from "../src/models/user";
-import { getUserBy, getUserById } from "./database";
+import { getUserBy, getUserById } from "./database-mongo";
 
 const LocalStrategy = require("passport-local").Strategy;
 const router = express.Router();
 
 // configure passport for local strategy
 passport.use(
-  new LocalStrategy(function (username: string, password: string, done: Function) {
-    const user = getUserBy("username", username);
+  new LocalStrategy(async function (username: string, password: string, done: Function) {
+    const user = await getUserBy("username", username);
 
     const failureMessage = "Incorrect username or password.";
     if (!user) {
@@ -18,7 +18,7 @@ passport.use(
     }
 
     // validate password
-    if (!bcrypt.compareSync(password, user.password)) {
+    if (!bcrypt.compareSync(password, (user as User).password)) {
       return done(null, false, { message: failureMessage });
     }
 
@@ -30,8 +30,8 @@ passport.serializeUser(function (user: User, done) {
   done(null, user.id);
 });
 
-passport.deserializeUser(function (id: string, done) {
-  const user = getUserById(id);
+passport.deserializeUser(async function (id: string, done) {
+  const user = await getUserById(id);
   done(null, user);
 });
 
