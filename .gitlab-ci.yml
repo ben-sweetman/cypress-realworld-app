@@ -8,6 +8,10 @@ test:
   script:
     - yarn install
     - yarn ci
+  artifacts:
+    paths:
+      - cypress/videos/**/*.mp4
+      - cypress/screenshots/**/*.png
 
 # include:
 #   - component: $CI_SERVER_FQDN/to-be-continuous/cypress/gitlab-ci-cypress@3.12.0
