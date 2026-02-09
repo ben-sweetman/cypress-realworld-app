@@ -1,7 +1,7 @@
 ///<reference path="types.ts" />
 
 import express from "express";
-import { getLikesByTransactionId, createLikes } from "./database";
+import { getLikesByTransactionId, createLikes } from "./database-mongo";
 import { ensureAuthenticated, validateMiddleware } from "./helpers";
 import { shortIdValidation } from "./validators";
 const router = express.Router();
@@ -13,9 +13,9 @@ router.get(
   "/:transactionId",
   ensureAuthenticated,
   validateMiddleware([shortIdValidation("transactionId")]),
-  (req, res) => {
+  async (req, res) => {
     const { transactionId } = req.params;
-    const likes = getLikesByTransactionId(transactionId);
+    const likes = await getLikesByTransactionId(transactionId);
 
     res.status(200);
     res.json({ likes });
@@ -27,10 +27,10 @@ router.post(
   "/:transactionId",
   ensureAuthenticated,
   validateMiddleware([shortIdValidation("transactionId")]),
-  (req, res) => {
+  async (req, res) => {
     const { transactionId } = req.params;
     /* istanbul ignore next */
-    createLikes(req.user?.id!, transactionId);
+    await createLikes(req.user?.id!, transactionId);
 
     res.sendStatus(200);
   }

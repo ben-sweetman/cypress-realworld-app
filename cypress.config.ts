@@ -19,6 +19,7 @@ try {
 } catch (e) {}
 
 export default defineConfig({
+  video: true,
   projectId: "7s5okt",
   retries: {
     runMode: 2,
@@ -129,6 +130,10 @@ export default defineConfig({
             throw new Error("GOOGLE_REFRESH_TOKEN and VITE_GOOGLE_CLIENT_SECRET must be set");
           }
           return { refreshToken, clientSecret };
+        },
+        log({ message, obj }) {
+          console.log(message, obj);
+          return null;
         },
       });
 

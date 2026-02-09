@@ -21,6 +21,7 @@ const TransactionPublicList: React.FC<TransactionPublicListProps> = ({
   amountRangeFilters,
 }) => {
   const [current, send, publicTransactionService] = useMachine(publicTransactionsMachine);
+  console.log('current', current);
   const { pageData, results } = current.context;
 
   // @ts-ignore

@@ -7,7 +7,7 @@ import {
   getBankAccountById,
   createBankAccountForUser,
   removeBankAccountById,
-} from "./database";
+} from "./database-mongo";
 import { ensureAuthenticated, validateMiddleware } from "./helpers";
 import { shortIdValidation, isBankAccountValidator } from "./validators";
 const router = express.Router();
@@ -15,9 +15,9 @@ const router = express.Router();
 // Routes
 
 //GET /bankAccounts (scoped-user)
-router.get("/", ensureAuthenticated, (req, res) => {
+router.get("/", ensureAuthenticated, async (req, res) => {
   /* istanbul ignore next */
-  const accounts = getBankAccountsByUserId(req.user?.id!);
+  const accounts = await getBankAccountsByUserId(req.user?.id!);
 
   res.status(200);
   res.json({ results: accounts });
@@ -28,10 +28,10 @@ router.get(
   "/:bankAccountId",
   ensureAuthenticated,
   validateMiddleware([shortIdValidation("bankAccountId")]),
-  (req, res) => {
+  async (req, res) => {
     const { bankAccountId } = req.params;
 
-    const account = getBankAccountById(bankAccountId);
+    const account = await getBankAccountById(bankAccountId);
 
     res.status(200);
     res.json({ account });
@@ -39,9 +39,9 @@ router.get(
 );
 
 //POST /bankAccounts (scoped-user)
-router.post("/", ensureAuthenticated, validateMiddleware(isBankAccountValidator), (req, res) => {
+router.post("/", ensureAuthenticated, validateMiddleware(isBankAccountValidator), async (req, res) => {
   /* istanbul ignore next */
-  const account = createBankAccountForUser(req.user?.id!, req.body);
+  const account = await createBankAccountForUser(req.user?.id!, req.body);
 
   res.status(200);
   res.json({ account });
@@ -52,10 +52,10 @@ router.delete(
   "/:bankAccountId",
   ensureAuthenticated,
   validateMiddleware([shortIdValidation("bankAccountId")]),
-  (req, res) => {
+  async (req, res) => {
     const { bankAccountId } = req.params;
 
-    const account = removeBankAccountById(bankAccountId);
+    const account = await removeBankAccountById(bankAccountId);
 
     res.status(200);
     res.json({ account });

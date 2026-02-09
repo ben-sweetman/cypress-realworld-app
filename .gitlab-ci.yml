@@ -3,16 +3,36 @@ stages:
   - acceptance
 
 test:
+  services:
+  - name: mongo:8.2
+    alias: mongo
+    command: ["mongod", "--bind_ip_all"]
   image: cypress/browsers:22.21.0
   stage: test
   script:
+    - apt-get update && apt-get install -y wget gnupg
+    - wget -qO- https://www.mongodb.org/static/pgp/server-8.0.asc | tee /etc/apt/trusted.gpg.d/server-8.0.asc
+    - echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/8.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-8.0.list
+    - apt-get update && apt-get install -y mongodb-mongosh
+    - apt-get install -y golang-go iputils-ping
+    - export GOPATH=$HOME/go
+    - go install github.com/fgm/untilMongod@latest
+    - ping -c 3 mongo
+    - $GOPATH/bin/untilMongod -url $MONGODB_URL -timeout 60 -v
+    - mongosh $MONGODB_URL --eval "db.adminCommand('ping')" || (echo "MongoDB failed to start" && exit 1)
     - yarn install
     - yarn ci
   artifacts:
+    when: always
     paths:
       - cypress/videos/**/*.mp4
       - cypress/screenshots/**/*.png
 
+
+variables:
+  MONGODB_URL: "mongodb://mongo:27017"
+  MONGODB_DB_NAME: "rwa-mongo-test"
+  FF_NETWORK_PER_BUILD: true
 # include:
 #   - component: $CI_SERVER_FQDN/to-be-continuous/cypress/gitlab-ci-cypress@3.12.0
 #     inputs:

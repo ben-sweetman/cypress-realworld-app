@@ -137,6 +137,7 @@ Cypress.Commands.add("loginByXstate", (username, password = Cypress.env("default
 
   cy.intercept("POST", "/login").as("loginUser");
   cy.intercept("GET", "/checkAuth").as("getUserProfile");
+  cy.intercept("GET", "/transactions/public").as("publicTransactions");
   cy.visit("/signin", { log: false }).then(() => {
     log.snapshot("before");
   });
@@ -156,8 +157,10 @@ Cypress.Commands.add("loginByXstate", (username, password = Cypress.env("default
     });
   });
 
+  cy.wait('@publicTransactions');
+
   return cy
-    .getBySel("list-skeleton")
+    .getBySel("list-skeleton", { timeout: 20000 })
     .should("not.exist")
     .then(() => {
       log.snapshot("after");
@@ -198,7 +201,7 @@ Cypress.Commands.add("switchUserByXstate", (username) => {
     } else {
       cy.getBySel("sidenav-username").contains(username);
     }
-    cy.getBySel("list-skeleton").should("not.exist");
+    cy.getBySel("list-skeleton", { timeout: 20000 }).should("not.exist");
     cy.getBySelLike("transaction-item").should("have.length.greaterThan", 1);
   });
 });
