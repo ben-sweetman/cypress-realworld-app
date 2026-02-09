@@ -11,7 +11,7 @@ import {
   getUserByUsername,
   searchUsers,
   removeUserFromResults,
-} from "./database";
+} from "./database-mongo";
 import { User } from "../src/models/user";
 import { ensureAuthenticated, validateMiddleware } from "./helpers";
 import {
@@ -23,25 +23,24 @@ import {
 const router = express.Router();
 
 // Routes
-router.get("/", ensureAuthenticated, (req, res) => {
+router.get("/", ensureAuthenticated, async (req, res) => {
   /* istanbul ignore next */
-  const users = removeUserFromResults(req.user?.id!, getAllUsers());
+  const users = removeUserFromResults(req.user?.id!, await getAllUsers());
   res.status(200).json({ results: users });
 });
 
-router.get("/search", ensureAuthenticated, validateMiddleware([searchValidation]), (req, res) => {
+router.get("/search", ensureAuthenticated, validateMiddleware([searchValidation]), async (req, res) => {
   const { q } = req.query;
 
   /* istanbul ignore next */
-  const users = removeUserFromResults(req.user?.id!, searchUsers(q as string));
-
+  const users = removeUserFromResults(req.user?.id!, await searchUsers(q as string));
   res.status(200).json({ results: users });
 });
 
-router.post("/", userFieldsValidator, validateMiddleware(isUserValidator), (req, res) => {
+router.post("/", userFieldsValidator, validateMiddleware(isUserValidator), async (req, res) => {
   const userDetails: User = req.body;
 
-  const user = createUser(userDetails);
+  const user = await createUser(userDetails);
 
   res.status(201);
   res.json({ user: user });
@@ -51,7 +50,7 @@ router.get(
   "/:userId",
   ensureAuthenticated,
   validateMiddleware([shortIdValidation("userId")]),
-  (req, res) => {
+  async (req, res) => {
     const { userId } = req.params;
 
     // Permission: account owner
@@ -62,17 +61,17 @@ router.get(
       });
     }
 
-    const user = getUserById(userId);
+    const user = await getUserById(userId);
 
     res.status(200);
     res.json({ user });
   }
 );
 
-router.get("/profile/:username", (req, res) => {
+router.get("/profile/:username", async (req, res) => {
   const { username } = req.params;
 
-  const user = pick(["firstName", "lastName", "avatar"], getUserByUsername(username));
+  const user = pick(["firstName", "lastName", "avatar"], await getUserByUsername(username));
 
   res.status(200);
   res.json({ user });
@@ -83,12 +82,12 @@ router.patch(
   ensureAuthenticated,
   userFieldsValidator,
   validateMiddleware([shortIdValidation("userId"), ...isUserValidator]),
-  (req, res) => {
+  async (req, res) => {
     const { userId } = req.params;
 
     const edits: User = req.body;
 
-    updateUserById(userId, edits);
+    await updateUserById(userId, edits);
 
     res.sendStatus(204);
   }

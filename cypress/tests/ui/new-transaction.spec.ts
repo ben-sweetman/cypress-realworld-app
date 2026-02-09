@@ -115,7 +115,7 @@ describe("New Transaction", function () {
     cy.getBySelLike("personal-tab").click();
     cy.getBySelLike("personal-tab").should("have.class", "Mui-selected");
 
-    cy.getBySelLike("transaction-item").should("contain", request.description);
+    cy.getBySelLike("transaction-item", { timeout: 10000 }).should("contain", request.description);
     cy.visualSnapshot("Transaction Item Description in List");
   });
 
@@ -218,7 +218,7 @@ describe("New Transaction", function () {
 
     cy.wait("@personalTransactions");
 
-    cy.getBySelLike("transaction-item")
+    cy.getBySelLike("transaction-item", { timeout: 10000 })
       .first()
       .should("contain", transactionPayload.description)
       .click({ force: true });

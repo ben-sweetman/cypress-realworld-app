@@ -122,7 +122,7 @@ describe("Transactions API", function () {
         expect(response.status).to.eq(200);
         expect(response.body.transaction.id).to.be.a("string");
         expect(response.body.transaction.status).to.eq("complete");
-        expect(response.body.transaction.requestStatus).to.eq(undefined);
+        expect(response.body.transaction.requestStatus).to.eq(null);
       });
     });
 

@@ -207,4 +207,103 @@ describe("testing various bits", function () {
     cy.getBySel('transaction-create-amount-input').find('.MuiInputBase-root').should('have.class', 'Mui-error');
     cy.get('#transaction-create-amount-input-helper-text').should('be.visible').and('contain.text', 'Please enter a valid amount');
   });
+
+  it('should be able to change a users settings', function () {
+    cy.login('Dina20', 's3cret');
+
+    cy.getBySel('sidenav-user-settings').click();
+    cy.url().should('include', '/settings');
+
+    cy.getBySel('user-settings-firstName-input').should('have.value', 'Darrel');
+    cy.getBySel('user-settings-lastName-input').should('have.value', 'Ortiz');
+    cy.getBySel('user-settings-email-input').should('have.value', 'Marielle_Wiza@yahoo.com');
+    cy.getBySel('user-settings-phoneNumber-input').should('have.value', '887-309-1593');
+
+    cy.getBySel('user-settings-firstName-input').clear();
+    cy.getBySel('user-settings-firstName-input').type('UpdatedFirstName');
+    cy.getBySel('user-settings-lastName-input').clear();
+    cy.getBySel('user-settings-lastName-input').type('UpdatedLastName');
+    cy.getBySel('user-settings-email-input').clear();
+    cy.getBySel('user-settings-email-input').type('testing@test.com');
+    cy.getBySel('user-settings-phoneNumber-input').clear();
+    cy.getBySel('user-settings-phoneNumber-input').type('123-456-7890');
+
+    cy.intercept('PATCH', '/users/*').as('updateUser');
+    cy.getBySel('user-settings-submit').click();
+    cy.wait('@updateUser').then((subject) => {
+      const response = subject.response;
+      expect(response?.statusCode).to.eq(204);
+      const updatedUser = subject.request?.body;
+      expect(updatedUser).to.have.property('firstName', 'UpdatedFirstName');
+      expect(updatedUser).to.have.property('lastName', 'UpdatedLastName');
+      expect(updatedUser).to.have.property('email', 'testing@test.com');
+      expect(updatedUser).to.have.property('phoneNumber', '123-456-7890');
+    });
+
+    cy.getBySel('sidenav-signout').click();
+    cy.login('Dina20', 's3cret');
+    cy.getBySel('sidenav-user-settings').click();
+
+    cy.getBySel('user-settings-firstName-input').should('have.value', 'UpdatedFirstName');
+    cy.getBySel('user-settings-lastName-input').should('have.value', 'UpdatedLastName');
+    cy.getBySel('user-settings-email-input').should('have.value', 'testing@test.com');
+    cy.getBySel('user-settings-phoneNumber-input').should('have.value', '123-456-7890');
+  });
+
+  it('Should be able to delete bank account', function () {
+    cy.login('Dina20', 's3cret');
+
+    cy.getBySel('sidenav-bankaccounts').click();
+    cy.url().should('include', '/bankaccounts');
+  
+    cy.getBySelLike('bankaccount-list-item').should('have.length', 1).first().as('bankAccountItem');
+    cy.get('@bankAccountItem').should('contain.text', 'Okuneva Inc Bank');
+
+    cy.intercept('POST', '/graphql').as('deleteBankAccount');
+    cy.get('@bankAccountItem').find('[data-test=bankaccount-delete]').click();
+
+    cy.wait('@deleteBankAccount').then((subject) => {
+      const response = subject.response;
+      expect(response?.statusCode).to.eq(200);
+
+      const request = subject.request.body;
+      expect(request).to.have.property('operationName', 'DeleteBankAccount');
+    });
+
+    cy.get('@bankAccountItem').should('contain.text', 'Okuneva Inc Bank (Deleted)');
+    cy.getBySel('bankaccount-delete').should('not.exist');
+  });
+
+  it('should be able to create account from the bank accounts page', function () {
+    cy.login('Dina20', 's3cret');
+
+    cy.getBySel('sidenav-bankaccounts').click();
+    cy.url().should('include', '/bankaccounts');
+
+    cy.getBySelLike('bankaccount-list-item').should('have.length', 1).first().as('bankAccountItem');
+    cy.get('@bankAccountItem').should('contain.text', 'Okuneva Inc Bank');
+    
+    cy.getBySel('bankaccount-new').click();
+
+    cy.url().should('include', '/bankaccounts/new');
+
+    cy.getBySel('bankaccount-bankName-input').type('New Bank Name');
+    cy.getBySel('bankaccount-routingNumber-input').type('123456789');
+    cy.getBySel('bankaccount-accountNumber-input').type('987654321');
+
+    cy.intercept('POST', '/graphql').as('createBankAccount');
+    cy.getBySel('bankaccount-submit').click();
+    cy.wait('@createBankAccount').then((subject) => {
+      const response = subject.response;
+      expect(response?.statusCode).to.eq(200);
+      const createRequest = subject.request.body;
+      expect(createRequest).to.have.property('operationName', 'CreateBankAccount');
+      expect(createRequest.variables.bankName).to.equal('New Bank Name');
+      expect(createRequest.variables.routingNumber).to.equal('123456789');
+      expect(createRequest.variables.accountNumber).to.equal('987654321');
+      expect(createRequest.variables.userId).to.exist;
+    });
+
+    cy.getBySelLike('bankaccount-list-item').should('have.length', 2).last().should('contain.text', 'New Bank Name');
+  });
 });
